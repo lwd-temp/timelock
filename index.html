@@ -289,13 +289,13 @@
           v.value = params.get(k)
         }
       }
+      updateButtonState()
     }
     window.onhashchange = updateParams
 
     function main() {
       updateParams()
       updateProgress(0, +txtIter.value)
-      updateButtonState()
 
       if (!isSecureContext) {
         showError('本程序必须位于 HTTPS 或本地站点')
