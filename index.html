@@ -49,6 +49,7 @@
     <button id="btnPause">⏸️ 暂停</button>
     <button id="btnContinue">⏯️ 继续</button>
     <button id="btnStop">⏹️ 停止</button>
+    <button id="btnShare">🔗 分享</button>
   </div>
   <div>🔐 密文:</div>
   <div>
@@ -250,6 +251,17 @@
       }
     }
 
+    btnShare.onclick = function() {
+      const url = new URL(location.href)
+      url.hash = new URLSearchParams({
+        'iter': txtIter.value,
+        'key': txtKey.value,
+        'cipher': txtCipher.value,
+      })
+      navigator.clipboard.writeText(url)
+      alert('密文链接已复制')
+    }
+
     function updateProgress(val, max) {
       const percent = (val / max) * 100
       progressBar.value = percent
@@ -292,6 +304,7 @@
       updateButtonState()
     }
     window.onhashchange = updateParams
+
 
     function main() {
       updateParams()
