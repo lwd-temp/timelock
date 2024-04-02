@@ -175,7 +175,7 @@
 
         const elapsedSec = (t1 - t0) / 1000
         const remainIter = iterNum - i
-        txtTime.textContent = formatTime(remainIter * elapsedSec)
+        txtTime.textContent = formatTime(Math.ceil(remainIter * elapsedSec))
 
         updateProgress(i, iterNum)
 
