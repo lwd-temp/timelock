@@ -42,7 +42,7 @@
     ⏳ 进度: <progress id="progressBar" value="0" max="100"></progress>
     <span id="txtProgVal"></span>/<span id="txtProgMax"></span>
     (<span id="txtProgPercent"></span>%)
-    剩余 <span id="txtTime">-</span>
+    剩余时间 <span id="txtTime">-</span>
   </div>
   <div>
     <button id="btnEncrypt">🔽 加密</button>
@@ -131,9 +131,9 @@
 
     function formatTime(sec) {
       const time = new Date(sec * 1000).toISOString().slice(11, 19)
-      if (sec > 86400) {
-        const day = sec / 86400 | 0
-        return `${day}天` + time
+      const day = sec / 86400 | 0
+      if (day) {
+        return `${day}天${time}`
       }
       return time
     }
