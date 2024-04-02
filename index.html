@@ -21,8 +21,8 @@
       width: 20em;
     }
     #txtError {
-      color: red;
       height: 1em;
+      color: red;
     }
   </style>
 </head>
@@ -42,6 +42,7 @@
     ⏳ 进度: <progress id="progressBar" value="0" max="100"></progress>
     <span id="txtProgVal"></span>/<span id="txtProgMax"></span>
     (<span id="txtProgPercent"></span>%)
+    剩余 <span id="txtTime">-</span>
   </div>
   <div>
     <button id="btnEncrypt">🔽 加密</button>
@@ -128,6 +129,15 @@
       return promise
     }
 
+    function formatTime(sec) {
+      const time = new Date(sec * 1000).toISOString().slice(11, 19)
+      if (sec > 86400) {
+        const day = sec / 86400 | 0
+        return `${day}天` + time
+      }
+      return time
+    }
+
     btnGenKey.onclick = function() {
       const bin = crypto.getRandomValues(new Uint8Array(8))
       txtKey.value = bin2hex(bin)
@@ -159,7 +169,14 @@
       // 本程序通过多次调用 PBKDF2 的方式规避这些问题
       //
       for (let i = 1; i <= iterNum; i++) {
+        const t0 = Date.now()
         keyBin = await pbkdf2(keyBin, pbkdfOpts, 256)
+        const t1 = Date.now()
+
+        const elapsedSec = (t1 - t0) / 1000
+        const remainIter = iterNum - i
+        txtTime.textContent = formatTime(remainIter * elapsedSec)
+
         updateProgress(i, iterNum)
 
         if (pausedSignal) {
@@ -175,6 +192,7 @@
         }
       }
 
+      txtTime.textContent = '-'
       isStopped = true
       return keyBin
     }
