@@ -48,7 +48,7 @@
     <button id="btnEncrypt">🔽 加密</button>
     <button id="btnDecrypt">🔼 解密</button>
     <button id="btnPause">⏸️ 暂停</button>
-    <button id="btnContinue">⏯️ 继续</button>
+    <button id="btnResume">⏯️ 继续</button>
     <button id="btnStop">⏹️ 停止</button>
     <button id="btnShare">🔗 分享</button>
   </div>
@@ -162,6 +162,7 @@
       }
       const iterNum = +txtIter.value
       isStopped = false
+      txtTime.textContent = '评估中...'
 
       //
       // 由于 PBKDF2 不支持回调，因此无法查看进度
@@ -251,7 +252,7 @@
       pausedSignal = createSignal()
     }
 
-    btnContinue.onclick = function() {
+    btnResume.onclick = function() {
       if (!pausedSignal) {
         return
       }
@@ -264,7 +265,7 @@
         return
       }
       if (confirm('确定停止?')) {
-        btnContinue.onclick()
+        btnResume.onclick()
         isStopped = true
       }
     }
