@@ -330,6 +330,10 @@
     function main() {
       updateParams()
       updateProgress(0, +txtIter.value)
+
+      if (!isSecureContext) {
+        showError('This program must be hosted on HTTPS or localhost')
+      }
     }
     main()
   </script>
