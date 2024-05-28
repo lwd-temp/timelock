@@ -10,7 +10,7 @@ https://etherdream.github.io/timelock/
 
 ## Test
 
-https://etherdream.github.io/timelock/#iter=10&key=0xF9C2255127986BD3&cipher=0x7C1E6FE9043EB79816C77D990376A78752E243B56F13B5393A35C4
+https://etherdream.github.io/timelock/#iter=30&key=0xF9C2255127986BD3&cipher=0xF38626AA8BEC4E5E2DDCFF8987BB79440ABEF08693DFC5299DACBB
 
 Click the "Decrypt" button and the message will be decrypted after ~30s.
 
@@ -50,3 +50,10 @@ However, fast encryption can still be tried. We can pre-compute `<key, dk>` reco
 ## Known issues
 
 FireFox is not optimized for PBKDF2（~50% slower)
+
+
+## When to use
+
+* CPU race. The first person to unlock it will be rewarded with a coupon.
+
+* Temporarily lock an account, e.g. game account, wallet private key, etc. Let Moore's Law take over your account, not your spirit.
