@@ -1,7 +1,52 @@
-# 时间锁
+# Timelock
 
-基于 WebCrypto API PBKDF2 实现消息延时解密。
+The sender encrypts the message and the receiver cannot decrypt it immediately, but must wait for a specified time before seeing the message.
 
-演示: https://etherdream.github.io/timelock/
+Data and algorithms are public, no servers are required.
 
-测试: https://etherdream.github.io/timelock/#iter=10&key=0xC7E071A0F35D5677&cipher=0x7667ADF22C7FA346A2E13307611073FFF7011C903E01DA50925791
+## Demo
+
+https://etherdream.github.io/timelock/
+
+## Test
+
+https://etherdream.github.io/timelock/#iter=10&key=0xF9C2255127986BD3&cipher=0x7C1E6FE9043EB79816C77D990376A78752E243B56F13B5393A35C4
+
+Click the "Decrypt" button and the message will be decrypted after ~30s.
+
+## How it works
+
+Encryption:
+
+```javascript
+key = gen_random_bytes()
+
+dk = pbkdf2_sha256(key, cost * 1e7)
+
+ciphertext = aes_encrypt(plaintext, key)
+```
+
+Output `key`, `cost` and `ciphertext`, the temporary value `dk` will be discarded.
+
+Decryption:
+
+```javascript
+dk = pbkdf2_sha256(key, cost * 1e7)
+
+plaintext = aes_decrypt(ciphertext, dk)
+```
+
+This program uses the PBKDF2 as a delay function for encryption and decryption. It seems silly because encryption takes the same time as decryption.
+
+In theory, encryption can be done quickly. For example, the authors of the RSA explained how to implement time-lock puzzles in [this paper](https://people.csail.mit.edu/rivest/pubs/RSW96.pdf) decades ago.
+
+Of course, these algorithms can be ported to the browser, but obviously it will not run as efficiently as native programs because a lot of performance will be lost in the JavaScript/WebAssembly VM. For impatient receivers, there is no need to decrypt the message in the browser, it can be done earlier using a native program.
+
+Since browsers support PBKDF2 natively and are optimized for it, using this API reduces the performance gap between browsers and native programs. Although this is not friendly to the sender, it makes no difference to the receiver.
+
+However, fast encryption can still be tried. We can pre-compute `<key, dk>` records for common costs, and take a record directly from the pool when we use it. For hourly costs, this is feasible.
+
+
+## Known issues
+
+FireFox is not optimized for PBKDF2（~50% slower)
